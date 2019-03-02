@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      daChecklist
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>  
+    <input class="new-todo" placeholder="What needs to be done? " autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">
+  </ion-item>
+  <ion-item *ngIf="todos.length > 0" class="main">
+      <ul class="todo-list">
+        <li *ngFor="let todo of filteredTodos"
+           [ngClass]="{'completed' : todo.completed, 'editing': todo == currentTodo}">
+          <div class="view">
+            <input class="toggle" type="checkbox" (change)="toggle(todo)" [checked]="todo.completed">
+            <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
+            <button (click)="delete(todo)" class="destroy"></button>
+          </div>
+          <input *ngIf="currentTodo == todo" [(ngModel)]="currentTodo.title"
+               (keyup.enter)="update(currentTodo)"
+               (keyup.esc)="cancelEdit()"
+               class="edit" autofocus>
+        </li>
+      </ul>
+    </ion-item>
+    <!--<ion-item>
+        <input class="toggle-all" id="toggle-all" type="checkbox" #inputToggleAll [checked]="allCompleted" (click)="toggleAll(inputToggleAll.checked)">
+        <label for="toggle-all">Mark all as complete</label>
+    </ion-item>-->
+    <footer *ngIf="todos.length > 0" class="footer">
+      <span class="todo-count"><strong>{{remaining}}</strong> item{{remaining !== 1 ? 's' : ''}} left</span>
+  
+      <!--<ul class="filters">
+        <li><a [routerLink]="['']" [ngClass]="{'selected': filter == 'SHOW_ALL'}">All</a></li>
+        <li><a [routerLink]="['', 'active']" [ngClass]="{'selected': filter == 'SHOW_ACTIVE'}">Active</a></li>
+        <li><a [routerLink]="['', 'completed']" [ngClass]="{'selected': filter == 'SHOW_COMPLETED'}">Completed</a>
+        </li>
+      </ul>  -->
+
+    <ion-button *ngIf="completed > 0" class="clear-completed" (click)="clearCompleted()">Clear completed</ion-button>
+  </footer>
+</ion-content>
+  
