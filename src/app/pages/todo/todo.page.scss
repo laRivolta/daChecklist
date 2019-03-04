@@ -1,127 +1,37 @@
-
-/*
-* @Author: Flcwl
-* @Date:   2018-07-30 14:26:58
- * @Last Modified by: flcwl
- * @Last Modified time: 2018-08-01 22:13:35
-*/
-
-/* $theme-color: pink;
- $theme-font-size: 16px; */
- * {
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    background-color: antiquewhite;
-  }
-  
-  main {
-    width: 40%;
-    height: 700px;
-    margin: 100px auto;
-    text-align: center;
-    background-color: white;
-    box-sizing: border-box;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-    0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2),
-    0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, 0.2); */
-  
-  }
-  
-  h1.logo {
-    color: pink;
-    margin-bottom: 20px;
-  }
-  
-  #todoName {
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    width: 70%;
-    height: 36px;
-    border: none;
-    outline: none;  /* it's good */
-    border-bottom: 1px gray solid;
-    background: rgba(0, 0, 0, 0.003);
-  }
-  /* input无法容纳其他元素,因此它不支持伪元素。但是checkbox可以 */
-  /* input.task::after {
-    content: url(../../assets/img/check-circle-regular.svg);
-    font-size: 22px;
-    color: #e6e6e6;
-    padding: 10px 27px 10px 27px;
-  } */
-  
-  .drop-group {
-    width: 70%;
-    /* background-color: aqua; */
-    margin: 0 auto;
-  }
-  
-  .left-item {
+.q1, .q2, .q3, .q4 {
+    border: 4px solid #fff;
+}
+ 
+.matrix {
+    margin-top: 30px;
+ 
+    ion-col {
+        --ion-grid-column-padding: 0px;
+        min-height: 150px;
+    }
+ 
+    .list {
+        padding: 0px;
+        height: 100%;
+    }
+ 
+    ion-item {
+        margin-bottom: 2px;
+    }
+}
+ 
+.q-header {
+    background-color: var(--ion-color-light);
+    height: 20px;
     text-align: left;
-    margin: 0px auto;
-    height: 36px;
-    /* margin-left: 60px; */
-    border-bottom: 1px gray solid;
-    border-radius: 3px;
-    /* box-shadow: 2px 2px 4px rgba(0,0,0,0.8); */
-  }
-  
-  .drop-group .task {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    -webkit-appearance: radio;
-  }
-  
-  .drop-group li.selected label {
-    color: #d9d9d9;
-    text-decoration: line-through;
-  }
-  
-  span.close a{
-    text-decoration: none;
-    color: blueviolet;
-    font-size: 18px;
-  }
-  
-  li.is-leave span.close {
-    display: none;
-  }
-  
-  .todo-bottom {
-    width: 70%;
-    height: 36px;
-    font-size: 16px;
-    /* background-color: blue; */
-    margin: 0 auto;
-  }
-  
-  .todo-bottom li {
-    width: 20%;
-    height: 36px;
-    float: left;
-  }
-  
-  .todo-bottom li.hidden{
-    visibility: hidden;
-  }
-  
-  
-  .todo-bottom li a {
-    text-decoration: none;
-    color: gray;
-  }
-  
-  .todo-bottom li.selected a{
-    color: yellowgreen;
-  }
-  
-  .item {
-    margin-bottom: 40px;
-  }
-  
+    font-weight: bold;
+}
+ 
+.delete-area {
+    //border: 2px dashed var(--ion-color-medium);
+    margin: 10px;
+    height: 100px;
+    ion-icon {
+       font-size: 64px;
+    }
+}
