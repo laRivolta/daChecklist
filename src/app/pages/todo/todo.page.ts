@@ -18,7 +18,7 @@ export class TodoPage {
 	  today: Array<Todo> = new Array();
 		later: Array<Todo> = new Array();
 		
-		selectedQuadrant: TodoTimescale = TodoTimescale.MIT;
+		selectedQuadrant: string = "MIT";
 
 	  todo: Todo = new Todo(0,'');
 		timescales = TodoTimescale;
@@ -48,29 +48,28 @@ export class TodoPage {
 	  }
 	 
 	  addTodo() {
-			console.log(this.selectedQuadrant);
 			switch (this.selectedQuadrant) {
-				case TodoTimescale.MIT:
-					this.todo.timescale = TodoTimescale.MIT;
+				case "MIT":
+					this.todo.timescale = "MIT";
 					this.mit.push(this.todo);
 					break;
-				case TodoTimescale.Today:
-					this.todo.timescale = TodoTimescale.Today;
+				case "Today":
+				this.todo.timescale = "Today";
 					this.today.push(this.todo);
 					break;
-				case TodoTimescale.Later:
-					this.todo.timescale = TodoTimescale.Later;
+				case "Later":
+					this.todo.timescale = "Later";
 					this.later.push(this.todo);
 					break;
 			}
 			this.todo = new Todo(0, '');
 		}
 
-		private compareByKey(o1,o2){
+		/*private compareByKey(o1,o2){
 			if(o1 == null || o2 == null){
 				return false;
 			}
-			return o1.key === o2;
-		}
+			return o1 === o2.key;
+		}*/
   
 }

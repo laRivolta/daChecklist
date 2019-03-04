@@ -22,7 +22,10 @@
           <ion-item>
             <ion-label>Quadrant:</ion-label>
             <ion-select [(ngModel)]="selectedQuadrant">
-              <ion-select-option *ngFor="let scale of timescales | keys" [value]="scale.key" [compareWith]="compareByKey">{{ scale.value }}</ion-select-option>
+              <!--<ion-select-option *ngFor="let scale of timescales | keys" [value]="scale.key" [compareWith]="compareBy">{{ scale.value }}</ion-select-option>-->
+              <ion-select-option value="MIT">MIT</ion-select-option>
+              <ion-select-option value="Today">Today</ion-select-option>
+              <ion-select-option value="Later">Later</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
