@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
 
-import { Todo, TodoTimescale } from './models/todo.model';
+import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../services/todo.service';
-import { KeysPipe } from '../../pipes/keys.pipe';
 
 @Component({
 	selector: 'app-todo',
@@ -12,64 +11,95 @@ import { KeysPipe } from '../../pipes/keys.pipe';
 	styleUrls: ['todo.page.scss'],
 	providers: [ TodoService ]
 })
-export class TodoPage {
-  
-  	mit: Array<Todo> = new Array();
-	  today: Array<Todo> = new Array();
-		later: Array<Todo> = new Array();
+export class TodoPage implements DoCheck {
+	
+	aMit: Array<Todo> = new Array();
+	aToday: Array<Todo> = new Array();
+	aLater: Array<Todo> = new Array();
 		
-		selectedQuadrant: string = "MIT";
+	selectedQuadrant: string = "MIT";
 
-	  todo: Todo = new Todo(0,'');
-		timescales = TodoTimescale;
+	newTodo: Todo = new Todo(0,'');
+	snapshot: Todo = new Todo(0,'');
 	 
-	  constructor(private dragulaService: DragulaService, private toastController: ToastController) {
+	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
 
-			this.dragulaService.drag('bag')
-				.subscribe(({ name, el, source }) => {
-					
-				});
-	 
-			this.dragulaService.removeModel('bag')
-				.subscribe(({ item }) => {
-					this.toastController.create({
-						message: 'Removed: ' + item.value,
-						duration: 2000
-						}).then(toast => toast.present());
-				});
-		
-			this.dragulaService.dropModel('bag')
-				.subscribe(({ item }) => {
+		this.dragulaService.drag('bag')
+			.subscribe(({ name, el, source }) => {
+				
 			});
-		
-			this.dragulaService.createGroup('bag', {
-				removeOnSpill: true
+	
+		this.dragulaService.removeModel('bag')
+			.subscribe(({ item }) => {
+				this.toastController.create({
+					message: 'Removed: ' + item.value,
+					duration: 2000
+					}).then(toast => toast.present());
 			});
-	  }
-	 
-	  addTodo() {
-			switch (this.selectedQuadrant) {
-				case "MIT":
-					this.todo.timescale = "MIT";
-					this.mit.push(this.todo);
-					break;
-				case "Today":
-				this.todo.timescale = "Today";
-					this.today.push(this.todo);
-					break;
-				case "Later":
-					this.todo.timescale = "Later";
-					this.later.push(this.todo);
-					break;
-			}
-			this.todo = new Todo(0, '');
-		}
+	
+		this.dragulaService.dropModel('bag')
+			.subscribe(({ item }) => {
+		});
+	
+		this.dragulaService.createGroup('bag', {
+			removeOnSpill: true
+		});
+	}
 
-		/*private compareByKey(o1,o2){
-			if(o1 == null || o2 == null){
-				return false;
-			}
-			return o1 === o2.key;
-		}*/
+	ngDoCheck() {
+		this.aMit = this.todoService.findAllMit();
+		this.aToday = this.todoService.findAllToday();
+		this.aLater = this.todoService.findAllLater();
+	}
+	
+	// ~ crud
+
+	addTodo() {
+		this.create(this.newTodo);
+		this.resetForm();
+	}
+
+	private create(todo: Todo) {
+		this.todoService.create(todo, this.selectedQuadrant);
+		this.newTodo = new Todo(0, '');
+	}
+
+	edit(todo: Todo) {
+		this.newTodo = todo;
+		this.snapshot = TodoUtils.copy(todo);
+	}
+
+	cancelEdit() {
+		TodoUtils.copyProperties(this.snapshot, this.newTodo);
+		this.newTodo = null;
+		this.snapshot = null;
+	}
+
+	update(todo: Todo) {
+		this.newTodo = null;
+		this.snapshot = null;
+		this.todoService.update(todo);
+	}
+
+	delete(todo: Todo) {
+		this.todoService.delete(todo);
+	}
+
+	toggle(todo: Todo, timescale: TodoTimescale) {
+		this.todoService.toggle(todo, timescale);
+	}
+
+	toggleAll(completed: boolean) {
+		this.todoService.toggleAll(completed);
+	}
+
+	clearCompleted() {
+		this.todoService.clearCompleted();
+	}
+
+	resetForm(){
+		this.newTodo = new Todo(0, '');
+		this.selectedQuadrant = "MIT";
+	}
   
 }

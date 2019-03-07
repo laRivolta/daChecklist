@@ -1,14 +1,12 @@
 export class Todo {
 	id: number;
 	title: string;
-	//timescale: TodoTimescale;
 	timescale: string;
 	completed: boolean;
 
-	constructor(id: number, title: string, /*timescale?: TodoTimescale,*/ timescale?: string, completed?: boolean) {
+	constructor(id: number, title: string, timescale?: string, completed?: boolean) {
 		this.id = id;
 		this.title = title;
-		//this.timescale = timescale ? timescale : TodoTimescale.MIT;
 		this.timescale = timescale ? timescale : "";
 		this.completed = completed ? completed : false;
 	}
