@@ -6,41 +6,79 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>  
-    <input class="new-todo" placeholder="What needs to be done? " autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">
-  </ion-item>
-  <ion-item *ngIf="todos.length > 0" class="main">
-      <ul class="todo-list">
-        <li *ngFor="let todo of filteredTodos"
-           [ngClass]="{'completed' : todo.completed, 'editing': todo == currentTodo}">
-          <div class="view">
-            <input class="toggle" type="checkbox" (change)="toggle(todo)" [checked]="todo.completed">
-            <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
-            <button (click)="delete(todo)" class="destroy"></button>
-          </div>
-          <input *ngIf="currentTodo == todo" [(ngModel)]="currentTodo.title"
-               (keyup.enter)="update(currentTodo)"
-               (keyup.esc)="cancelEdit()"
-               class="edit" autofocus>
-        </li>
-      </ul>
-    </ion-item>
-    <!--<ion-item>
-        <input class="toggle-all" id="toggle-all" type="checkbox" #inputToggleAll [checked]="allCompleted" (click)="toggleAll(inputToggleAll.checked)">
-        <label for="toggle-all">Mark all as complete</label>
-    </ion-item>-->
-    <footer *ngIf="todos.length > 0" class="footer">
-      <span class="todo-count"><strong>{{remaining}}</strong> item{{remaining !== 1 ? 's' : ''}} left</span>
+<ion-content padding>
+    <ion-grid>
+      <ion-row align-items-center>
+        <ion-col size="8">
+          <ion-item>
+            <ion-input class="new-todo" placeholder="What needs to be done? " autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+   
+        <ion-col size="4">
+          <ion-item>
+            <ion-select [(ngModel)]="selectedQuadrant">
+              <ion-select-option value="MIT">MIT</ion-select-option>
+              <ion-select-option value="Today">Today</ion-select-option>
+              <ion-select-option value="Later">Later</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+   
+      </ion-row>
+   
+      <ion-row no-padding class="matrix">
+        <ion-col size="12" class="mit">
+          <div class="q-header">MIT</div>
+          <ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">
+            <ion-item *ngFor="let todo of aMit" expand="block" text-wrap>
+              <div class="view" *ngIf="todo">
+                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.MIT)" [checked]="todo.completed">
+                <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
+              </div>
+              <input *ngIf="currentTodo == todo" [(ngModel)]="currentTodo.title"
+                    (keyup.enter)="update(currentTodo)"
+                    (keyup.esc)="cancelEdit()"
+                    class="edit" autofocus>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+   
+        <ion-col size="12" class="today">
+          <div class="q-header">Today</div>
+          <ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">
+            <ion-item *ngFor="let todo of aToday" expand="block" text-wrap>
+              <div class="view" *ngIf="todo">
+                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Today)" [checked]="todo.completed">
+                <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
+              </div>
+              <input *ngIf="currentTodo == todo" [(ngModel)]="currentTodo.title"
+                    (keyup.enter)="update(currentTodo)"
+                    (keyup.esc)="cancelEdit()"
+                    class="edit" autofocus>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+   
+        <ion-col size="12" class="later">
+            <div class="q-header">Later</div>
+            <ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">
+              <ion-item *ngFor="let todo of aLater" expand="block" text-wrap>
+                <div class="view" *ngIf="todo">
+                  <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
+                  <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
+                </div>
+                <input *ngIf="currentTodo == todo" [(ngModel)]="currentTodo.title"
+                      (keyup.enter)="update(currentTodo)"
+                      (keyup.esc)="cancelEdit()"
+                      class="edit" autofocus>
+              </ion-item>
+            </ion-list>
+          </ion-col>
   
-      <!--<ul class="filters">
-        <li><a [routerLink]="['']" [ngClass]="{'selected': filter == 'SHOW_ALL'}">All</a></li>
-        <li><a [routerLink]="['', 'active']" [ngClass]="{'selected': filter == 'SHOW_ACTIVE'}">Active</a></li>
-        <li><a [routerLink]="['', 'completed']" [ngClass]="{'selected': filter == 'SHOW_COMPLETED'}">Completed</a>
-        </li>
-      </ul>  -->
-
-    <ion-button *ngIf="completed > 0" class="clear-completed" (click)="clearCompleted()">Clear completed</ion-button>
-  </footer>
-</ion-content>
+      </ion-row>
+    </ion-grid>
+   
+  </ion-content>
   

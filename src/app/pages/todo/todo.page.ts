@@ -1,67 +1,70 @@
-import {ChangeDetectionStrategy, Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { DragulaService } from 'ng2-dragula';
 
-import {Todo, TodoUtils} from './todo.model';
-import {Filter, FilterUtil} from './filter.model';
-import {TodoService} from '../../services/todo.service';
+import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
 	selector: 'app-todo',
 	templateUrl: 'todo.page.html',
 	styleUrls: ['todo.page.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
-  	providers: [TodoService],
+	providers: [ TodoService ]
 })
-export class TodoPage implements OnInit, DoCheck, OnDestroy {
+export class TodoPage implements OnInit, DoCheck {
+	
+	aMit: Array<Todo> = new Array();
+	aToday: Array<Todo> = new Array();
+	aLater: Array<Todo> = new Array();
+		
+	selectedQuadrant: string = "MIT";
 
-  	private routeSubscription: Subscription;
-
-	newTodo: Todo = new Todo(0,'',false);
+	newTodo: Todo = new Todo(0,'');
 	currentTodo: Todo;
 	snapshot: Todo;
+	 
+	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
 
-	filter = Filter.ALL;
-	todos: Todo[];
-	filteredTodos: Todo[];
-	completed: number;
-	remaining: number;
-  	allCompleted: boolean;
-  
-  	constructor(private todoService: TodoService, private route: ActivatedRoute) {}
-
-	// ~ lifecycle
-
-	ngOnInit() {
-		this.routeSubscription = this.route.params.subscribe(params => {
-			this.filter = FilterUtil.fromString(params['filter']);
+		this.dragulaService.drag('bag')
+			.subscribe(({ name, el, source }) => {
+				
+			});
+	
+		this.dragulaService.removeModel('bag')
+			.subscribe(({ item }) => {
+				//this.delete(item, 0);
+			});
+	
+		this.dragulaService.dropModel('bag')
+			.subscribe(({ item }) => {
+		});
+	
+		this.dragulaService.createGroup('bag', {
+			removeOnSpill: true
 		});
 	}
 
+	ngOnInit() {
+		this.aMit = this.todoService.findAllMit();
+		this.aToday = this.todoService.findAllToday();
+		this.aLater = this.todoService.findAllLater();
+	}
+
 	ngDoCheck() {
-		this.todos = this.todoService.findAll();
-		this.filteredTodos = this.todos.filter((t) => FilterUtil.accepts(t, this.filter));
-		this.remaining = this.completed = 0;
-		this.todos.forEach(t => t.completed ? this.completed++ : this.remaining++);
-		this.allCompleted = this.todos.length === this.completed;
+		this.aMit = this.todoService.findAllMit();
+		this.aToday = this.todoService.findAllToday();
+		this.aLater = this.todoService.findAllLater();
+	}
+	
+	// ~ crud
+
+	addTodo() {
+		this.create(this.newTodo);
+		this.clearForm();
 	}
 
-	ngOnDestroy(): void {
-		this.routeSubscription.unsubscribe();
-  }
-  
-  // ~ crud
-
-  	addTodo(){
-		this.create(this.newTodo.title);
-	}
-
-	create(todo: string) {
-		if (todo.trim().length === 0) {
-			return;
-		}
-		this.todoService.create(todo);
-		this.newTodo.title = '';
+	private create(todo: Todo) {
+		this.todoService.create(todo, this.selectedQuadrant);
 	}
 
 	edit(todo: Todo) {
@@ -71,30 +74,35 @@ export class TodoPage implements OnInit, DoCheck, OnDestroy {
 
 	cancelEdit() {
 		TodoUtils.copyProperties(this.snapshot, this.currentTodo);
+		this.clearForm();
+	}
+
+	update(todo: Todo, timescale: TodoTimescale) {
+		this.todoService.update(todo, timescale);
+		this.clearForm();
+	}
+
+	delete(todo: Todo, timescale: TodoTimescale) {
+		this.todoService.delete(todo, timescale);
+		this.clearForm();
+	}
+
+	toggle(todo: Todo, timescale: TodoTimescale) {
+		this.todoService.toggle(todo, timescale);
+		this.clearForm();
+	}
+
+	/* utilities */
+
+	clearForm(){
+		this.newTodo = new Todo(0, "");
+		this.selectedQuadrant = "MIT";
 		this.currentTodo = null;
 		this.snapshot = null;
 	}
 
-	update(todo: Todo) {
-		this.currentTodo = null;
-		this.snapshot = null;
-		this.todoService.update(todo);
+	get timescale (){
+		return TodoTimescale;
 	}
-
-	delete(todo: Todo) {
-		this.todoService.delete(todo);
-	}
-
-	toggle(todo: Todo) {
-		this.todoService.toggle(todo);
-	}
-
-	toggleAll(completed: boolean) {
-		this.todoService.toggleAll(completed);
-	}
-
-	clearCompleted() {
-		this.todoService.clearCompleted();
-  }
   
 }
