@@ -32,49 +32,60 @@
       <ion-row no-padding class="matrix">
         <ion-col size="12" class="mit">
           <div class="q-header">MIT</div>
-          <ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">
-            <ion-item *ngFor="let todo of aMit" expand="block" text-wrap>
-              <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.MIT)" [checked]="todo.completed">
-                <label>{{todo.title}}</label>
-                <button class="destroy"></button>
-              </div>
-            </ion-item>
+          <!--<ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">-->
+          <ion-list lines="none">
+            <ion-item-sliding *ngFor="let todo of aMit">
+              <ion-item expand="block" text-wrap>
+                <div class="view" *ngIf="todo">
+                  <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.MIT)" [checked]="todo.completed">
+                  <label>{{todo.title}}</label>
+                </div>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="delete(todo, timescale.MIT)">Delete</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
           </ion-list>
         </ion-col>
    
         <ion-col size="12" class="today">
           <div class="q-header">Today</div>
-          <ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">
-            <ion-item *ngFor="let todo of aToday" expand="block" text-wrap>
-              <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Today)" [checked]="todo.completed">
-                <label>{{todo.title}}</label>
-                <button class="destroy"></button>
-              </div>
-            </ion-item>
+          <!--<ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">-->
+          <ion-list lines="none">
+            <ion-item-sliding *ngFor="let todo of aToday">
+              <ion-item expand="block" text-wrap>
+                <div class="view" *ngIf="todo">
+                  <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Today)" [checked]="todo.completed">
+                  <label>{{todo.title}}</label>
+                </div>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="delete(todo, timescale.Today)">Delete</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
           </ion-list>
         </ion-col>
    
         <ion-col size="12" class="later">
           <div class="q-header">Later</div>
-          <ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">
-            <ion-item *ngFor="let todo of aLater" expand="block" text-wrap>
-              <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
-                <label>{{todo.title}}</label>
-                <button class="destroy"></button>
-              </div>
-            </ion-item>
+          <!--<ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">-->
+          <ion-list lines="none">
+            <ion-item-sliding *ngFor="let todo of aLater">
+              <ion-item expand="block" text-wrap>
+                <div class="view" *ngIf="todo">
+                  <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
+                  <label>{{todo.title}}</label>
+                </div>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="delete(todo, timescale.Later)">Delete</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
           </ion-list>
         </ion-col>
   
       </ion-row>
     </ion-grid>
-   
-    <ion-row class="delete-area" align-items-center justify-content-center>
-      <ion-icon name="trash" color="medium"></ion-icon>
-    </ion-row>
    
   </ion-content>
   

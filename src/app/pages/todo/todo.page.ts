@@ -1,6 +1,6 @@
 import { Component, DoCheck } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { DragulaService } from 'ng2-dragula';
+//import { DragulaService } from 'ng2-dragula';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../services/todo.service';
@@ -22,9 +22,9 @@ export class TodoPage implements DoCheck {
 	newTodo: Todo = new Todo(0,'');
 	snapshot: Todo = new Todo(0,'');
 	 
-	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
+	constructor(private todoService: TodoService/*, private dragulaService: DragulaService*/, private toastController: ToastController) {
 
-		this.dragulaService.drag('bag')
+		/*this.dragulaService.drag('bag')
 			.subscribe(({ name, el, source }) => {
 				
 			});
@@ -43,7 +43,7 @@ export class TodoPage implements DoCheck {
 	
 		this.dragulaService.createGroup('bag', {
 			removeOnSpill: true
-		});
+		});*/
 	}
 
 	ngDoCheck() {
@@ -60,11 +60,13 @@ export class TodoPage implements DoCheck {
 	}
 
 	private create(todo: Todo) {
+		console.log(`Create ${JSON.stringify(todo)}`);
 		this.todoService.create(todo, this.selectedQuadrant);
 		this.newTodo = new Todo(0, '');
 	}
 
 	edit(todo: Todo) {
+		console.log(`Edit ${JSON.stringify(todo)}`);
 		this.newTodo = todo;
 		this.snapshot = TodoUtils.copy(todo);
 	}
@@ -76,17 +78,19 @@ export class TodoPage implements DoCheck {
 	}
 
 	update(todo: Todo) {
+		console.log(`Delete ${JSON.stringify(todo)}`);
 		this.newTodo = null;
 		this.snapshot = null;
 		this.todoService.update(todo);
 	}
 
-	delete(todo: Todo) {
-		this.todoService.delete(todo);
+	delete(todo: Todo, timescale: TodoTimescale) {
+		console.log(`Delete ${JSON.stringify(todo)}`);
+		this.todoService.delete(todo, timescale);
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
-		console.log(`toggle ${timescale}`);
+		console.log(`Toggle ${JSON.stringify(todo)}`);
 		this.todoService.toggle(todo, timescale);
 	}
 

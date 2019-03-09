@@ -29,7 +29,9 @@ export class TodoService {
 	}
 
 	create(todo: Todo, timescale: string): Todo {
+		//console.log(`Create ${JSON.stringify(todo)} inside ${timescale}`);
 		if (todo && todo.title && todo.title.trim().length === 0) {
+			console.error(`Empty title in ${JSON.stringify(todo)}`);
 			return;
 		}
 
@@ -50,43 +52,58 @@ export class TodoService {
 	}
 
 	findAllMit() {
+		console.log(`Fetch Mit's`);
 		return this.aMit ? this.aMit : [];
 	}
 
 	findAllToday() {
+		//console.log(`Fetch Today's`);
 		return this.aToday ? this.aToday : [];
 	}
 
 	findAllLater() {
+		//console.log(`Fetch Later's`);
 		return this.aLater ? this.aLater : [];
 	}
 
 	update(todo: Todo) {
 		todo.title = todo.title.trim();
 		if (todo.title.length === 0) {
-			this.delete(todo);
+			//this.delete(todo);
 		}
-		//this.save();
+		this.save();
 	}
 
-	delete(todo: Todo) {
-		//this.todos = this.todos.filter((t) => t !== todo);
+	delete(todo: Todo, timescale: TodoTimescale) {
+		//console.log(`Delete ${JSON.stringify(todo)} from ${timescale} ...`);
+		switch (timescale) {
+			case TodoTimescale.MIT:
+				this.aMit = this.aMit.filter((t) => t.id !== todo.id);
+				break;
+			case TodoTimescale.Today:
+				this.aToday = this.aToday.filter((t) => t.id !== todo.id);
+				break;
+			case TodoTimescale.Later:
+				this.aLater = this.aLater.filter((t) => t.id !== todo.id);
+				break;
+		}
 		this.save();
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
+		//console.log(`Toggle ${JSON.stringify(todo)} in ${timescale} ...`);
 		let currentTodoIndex = -1;
 		switch (timescale) {
 			case TodoTimescale.MIT:
-				currentTodoIndex = this.aMit.findIndex(t => todo.id == t.id);
+				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
 				this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
 				break;
 			case TodoTimescale.Today:
-				currentTodoIndex = this.aToday.findIndex(t => todo.id == t.id);
+				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
 				this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
 				break;
 			case TodoTimescale.Later:
-				currentTodoIndex = this.aLater.findIndex(t => todo.id == t.id);
+				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
 				this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
 				break;
 		}
@@ -94,7 +111,7 @@ export class TodoService {
 	}
 
 	private fetch() {
-		console.log(`Fetch all lists ...`);
+		//console.log(`Fetch all lists ...`);
 		const aMitPersisted = localStorage.getItem(TodoService.STORAGE_KEY_MIT);
 		const aTodayPersisted = localStorage.getItem(TodoService.STORAGE_KEY_TODAY);
 		const aLaterPersisted = localStorage.getItem(TodoService.STORAGE_KEY_LATER);
@@ -103,9 +120,9 @@ export class TodoService {
 			this.aToday = JSON.parse(aTodayPersisted || '[]');
 			this.aLater = JSON.parse(aLaterPersisted || '[]');
 		} catch (ignore) {
-			this.aMit = [];
-			this.aLater = [];
-			this.aToday = [];
+			this.aMit = new Array();
+			this.aLater = new Array();
+			this.aToday = new Array();
 		}
 	}
 
