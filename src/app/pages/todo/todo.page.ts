@@ -56,7 +56,7 @@ export class TodoPage implements DoCheck {
 
 	addTodo() {
 		this.create(this.newTodo);
-		this.resetForm();
+		this.clearForm();
 	}
 
 	private create(todo: Todo) {
@@ -86,20 +86,19 @@ export class TodoPage implements DoCheck {
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
+		console.log(`toggle ${timescale}`);
 		this.todoService.toggle(todo, timescale);
 	}
 
-	toggleAll(completed: boolean) {
-		this.todoService.toggleAll(completed);
-	}
+	/* utilities */
 
-	clearCompleted() {
-		this.todoService.clearCompleted();
-	}
-
-	resetForm(){
+	clearForm(){
 		this.newTodo = new Todo(0, '');
 		this.selectedQuadrant = "MIT";
+	}
+
+	get timescale (){
+		return TodoTimescale;
 	}
   
 }

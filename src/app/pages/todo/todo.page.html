@@ -35,7 +35,7 @@
           <ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">
             <ion-item *ngFor="let todo of aMit" expand="block" text-wrap>
               <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, TodoTimescale.MIT)" [checked]="todo.completed">
+                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.MIT)" [checked]="todo.completed">
                 <label>{{todo.title}}</label>
                 <button class="destroy"></button>
               </div>
@@ -48,7 +48,7 @@
           <ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">
             <ion-item *ngFor="let todo of aToday" expand="block" text-wrap>
               <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, TodoTimescale.Today)" [checked]="todo.completed">
+                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Today)" [checked]="todo.completed">
                 <label>{{todo.title}}</label>
                 <button class="destroy"></button>
               </div>
@@ -61,7 +61,7 @@
           <ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">
             <ion-item *ngFor="let todo of aLater" expand="block" text-wrap>
               <div class="view" *ngIf="todo">
-                <input class="toggle" type="checkbox" (change)="toggle(todo, TodoTimescale.Later)" [checked]="todo.completed">
+                <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
                 <label>{{todo.title}}</label>
                 <button class="destroy"></button>
               </div>

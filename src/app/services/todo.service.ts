@@ -75,33 +75,26 @@ export class TodoService {
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
-		/*switch (timescale) {
+		let currentTodoIndex = -1;
+		switch (timescale) {
 			case TodoTimescale.MIT:
-				this.aMit = this.aMit.forEach(function (t) {
-					return t.completed = !t.completed;
-				});
+				currentTodoIndex = this.aMit.findIndex(t => todo.id == t.id);
+				this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
 				break;
 			case TodoTimescale.Today:
-				this.aToday = this.aToday.map((t) => t !== todo);
+				currentTodoIndex = this.aToday.findIndex(t => todo.id == t.id);
+				this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
 				break;
 			case TodoTimescale.Later:
-				this.aLater = this.aLater.map((t) => t !== todo);
+				currentTodoIndex = this.aLater.findIndex(t => todo.id == t.id);
+				this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
 				break;
-		}*/
-		//this.save();
-	}
-
-	toggleAll(completed: boolean) {
-		//this.todos.forEach((t) => t.completed = completed);
-		//this.save();
-	}
-
-	clearCompleted() {
-		//this.todos = this.todos.filter((t) => !t.completed);
-		//this.save();
+		}
+		this.save();
 	}
 
 	private fetch() {
+		console.log(`Fetch all lists ...`);
 		const aMitPersisted = localStorage.getItem(TodoService.STORAGE_KEY_MIT);
 		const aTodayPersisted = localStorage.getItem(TodoService.STORAGE_KEY_TODAY);
 		const aLaterPersisted = localStorage.getItem(TodoService.STORAGE_KEY_LATER);
@@ -117,6 +110,7 @@ export class TodoService {
 	}
 
 	private save(): void {
+		console.log(`Saving all lists ...`);
 		localStorage.setItem(TodoService.STORAGE_KEY_MIT, JSON.stringify(this.aMit));
 		localStorage.setItem(TodoService.STORAGE_KEY_TODAY, JSON.stringify(this.aToday));
 		localStorage.setItem(TodoService.STORAGE_KEY_LATER, JSON.stringify(this.aLater));
