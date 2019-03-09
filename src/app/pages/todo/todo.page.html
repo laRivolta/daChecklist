@@ -10,17 +10,15 @@
     <ion-grid>
    
       <ion-row align-items-center>
-        <ion-col size="12">
+        <ion-col size="8">
           <ion-item>
-            <ion-label position="fixed">New Todo:</ion-label>
-            <ion-input [(ngModel)]="newTodo.title"></ion-input>
+            <ion-input class="new-todo" placeholder="What needs to be done? " autofocus="" [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()">
+            </ion-input>
           </ion-item>
-   
         </ion-col>
    
-        <ion-col size="12">
+        <ion-col size="4">
           <ion-item>
-            <ion-label>Quadrant:</ion-label>
             <ion-select [(ngModel)]="selectedQuadrant">
               <ion-select-option value="MIT">MIT</ion-select-option>
               <ion-select-option value="Today">Today</ion-select-option>
@@ -30,11 +28,6 @@
         </ion-col>
    
       </ion-row>
-   
-      <ion-button expand="block" fill="outline" (click)="addTodo()">
-        <ion-icon name="add" slot="start"></ion-icon>
-        Add Todo
-      </ion-button>
    
       <ion-row no-padding class="matrix">
         <ion-col size="12" class="mit">
