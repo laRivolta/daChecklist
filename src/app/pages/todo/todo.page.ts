@@ -20,7 +20,8 @@ export class TodoPage implements OnInit, DoCheck {
 	selectedQuadrant: string = "MIT";
 
 	newTodo: Todo = new Todo(0,'');
-	editing: boolean = false;
+	currentTodo: Todo;
+	snapshot: Todo;
 	 
 	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
 
@@ -31,7 +32,7 @@ export class TodoPage implements OnInit, DoCheck {
 	
 		this.dragulaService.removeModel('bag')
 			.subscribe(({ item }) => {
-				this.delete(item, 0);
+				//this.delete(item, 0);
 			});
 	
 		this.dragulaService.dropModel('bag')
@@ -58,36 +59,37 @@ export class TodoPage implements OnInit, DoCheck {
 	// ~ crud
 
 	addTodo() {
-		//!this.editing ? this.create(this.newTodo) : this.update(this.newTodo);
 		this.create(this.newTodo);
 		this.clearForm();
 	}
 
 	private create(todo: Todo) {
-		console.log(`Create ${JSON.stringify(todo)}`);
 		this.todoService.create(todo, this.selectedQuadrant);
 	}
 
 	edit(todo: Todo) {
-		console.log(`Edit ${JSON.stringify(todo)}`);
-		this.editing = true;
-		this.newTodo = todo;
+		this.currentTodo = todo;
+		this.snapshot = TodoUtils.copy(todo);
 	}
 
-	update(todo: Todo) {
-		console.log(`Update ${JSON.stringify(todo)}`);
-		this.todoService.update(todo, this.selectedQuadrant);
+	cancelEdit() {
+		TodoUtils.copyProperties(this.snapshot, this.currentTodo);
+		this.clearForm();
+	}
+
+	update(todo: Todo, timescale: TodoTimescale) {
+		this.todoService.update(todo, timescale);
 		this.clearForm();
 	}
 
 	delete(todo: Todo, timescale: TodoTimescale) {
-		console.log(`Delete ${JSON.stringify(todo)}`);
 		this.todoService.delete(todo, timescale);
+		this.clearForm();
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
-		console.log(`Toggle ${JSON.stringify(todo)}`);
 		this.todoService.toggle(todo, timescale);
+		this.clearForm();
 	}
 
 	/* utilities */
@@ -95,7 +97,8 @@ export class TodoPage implements OnInit, DoCheck {
 	clearForm(){
 		this.newTodo = new Todo(0, "");
 		this.selectedQuadrant = "MIT";
-		this.editing = false;
+		this.currentTodo = null;
+		this.snapshot = null;
 	}
 
 	get timescale (){

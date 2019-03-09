@@ -17,29 +17,6 @@ export class TodoService {
 		this.fetch();
 	}
 
-	create(todo: Todo, timescale: string): Todo {
-		//console.log(`Create ${JSON.stringify(todo)} inside ${timescale}`);
-		if (todo && todo.title && todo.title.trim().length === 0) {
-			console.error(`Empty title in ${JSON.stringify(todo)}`);
-			return;
-		}
-
-		const newTodo = new Todo(this.getRandomInt(), todo.title, timescale, todo.completed);
-		switch (timescale) {
-			case "MIT":
-				this.aMit.push(newTodo);
-				break;
-			case "Today":
-				this.aToday.push(newTodo);
-				break;
-			case "Later":
-				this.aLater.push(newTodo);
-				break;
-		}
-		this.save();
-		return newTodo;
-	}
-
 	findAllMit() {
 		//console.log(`Fetch Mit's`);
 		return this.aMit ? this.aMit : [];
@@ -55,18 +32,63 @@ export class TodoService {
 		return this.aLater ? this.aLater : [];
 	}
 
-	update(todo: Todo, timescale: string) {
+	create(todo: Todo, timescale: string): Todo {
 
 		if (todo && todo.title && todo.title.trim().length === 0) {
 			console.error(`Empty title in ${JSON.stringify(todo)}`);
 			return;
 		}
 
+		const newTodo = new Todo(this.getRandomInt(), todo.title, timescale, todo.completed);
+		console.log(`Create ${JSON.stringify(newTodo)}`);
+		switch (timescale) {
+			case "MIT":
+				this.aMit.push(newTodo);
+				break;
+			case "Today":
+				this.aToday.push(newTodo);
+				break;
+			case "Later":
+				this.aLater.push(newTodo);
+				break;
+		}
+		this.save();
+		return newTodo;
+	}
+
+	update(todo: Todo, timescale: TodoTimescale) {
+		
+		if (todo && todo.title && todo.title.trim().length === 0) {
+			console.error(`Empty title in ${JSON.stringify(todo)}`);
+			return;
+		}
+		console.log(`Update ${JSON.stringify(todo)}`);
+		let currentTodoIndex = -1;
+		switch (timescale) {
+			case TodoTimescale.MIT:
+				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
+				if (currentTodoIndex >= 0) {
+					this.aMit[currentTodoIndex] = this.aMit[currentTodoIndex];
+				}
+				break;
+			case TodoTimescale.Today:
+				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
+				if (currentTodoIndex >= 0) {
+					this.aToday[currentTodoIndex] = this.aToday[currentTodoIndex];
+				}
+				break;
+			case TodoTimescale.Later:
+				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
+				if (currentTodoIndex >= 0) {
+					this.aLater[currentTodoIndex] = this.aLater[currentTodoIndex];
+				}
+				break;
+		}
 		this.save();
 	}
 
 	delete(todo: Todo, timescale: TodoTimescale) {
-		//console.log(`Delete ${JSON.stringify(todo)} from ${timescale} ...`);
+		console.log(`Delete ${JSON.stringify(todo)} `);
 		switch (timescale) {
 			case TodoTimescale.MIT:
 				this.aMit = this.aMit.filter((t) => t.id !== todo.id);
@@ -82,24 +104,24 @@ export class TodoService {
 	}
 
 	toggle(todo: Todo, timescale: TodoTimescale) {
-		//console.log(`Toggle ${JSON.stringify(todo)} in ${timescale} ...`);
+		console.log(`Toggle ${JSON.stringify(todo)} in ${timescale} ...`);
 		let currentTodoIndex = -1;
 		switch (timescale) {
 			case TodoTimescale.MIT:
 				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
-				if (currentTodoIndex > 0) {
+				if (currentTodoIndex >= 0) {
 					this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
 				}
 				break;
 			case TodoTimescale.Today:
 				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
-				if (currentTodoIndex > 0) {
+				if (currentTodoIndex >= 0) {
 					this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
 				}
 				break;
 			case TodoTimescale.Later:
 				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
-				if (currentTodoIndex > 0) {
+				if (currentTodoIndex >= 0) {
 					this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
 				}
 				break;
@@ -108,7 +130,7 @@ export class TodoService {
 	}
 
 	private fetch() {
-		//console.log(`Fetch all lists ...`);
+		console.log(`Fetch all lists ...`);
 		const aMitPersisted = localStorage.getItem(TodoService.STORAGE_KEY_MIT);
 		const aTodayPersisted = localStorage.getItem(TodoService.STORAGE_KEY_TODAY);
 		const aLaterPersisted = localStorage.getItem(TodoService.STORAGE_KEY_LATER);
