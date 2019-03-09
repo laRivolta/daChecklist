@@ -1,6 +1,6 @@
-import { Component, DoCheck } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-//import { DragulaService } from 'ng2-dragula';
+import { DragulaService } from 'ng2-dragula';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../services/todo.service';
@@ -11,7 +11,7 @@ import { TodoService } from '../../services/todo.service';
 	styleUrls: ['todo.page.scss'],
 	providers: [ TodoService ]
 })
-export class TodoPage implements DoCheck {
+export class TodoPage implements OnInit, DoCheck {
 	
 	aMit: Array<Todo> = new Array();
 	aToday: Array<Todo> = new Array();
@@ -20,21 +20,18 @@ export class TodoPage implements DoCheck {
 	selectedQuadrant: string = "MIT";
 
 	newTodo: Todo = new Todo(0,'');
-	snapshot: Todo = new Todo(0,'');
+	editing: boolean = false;
 	 
-	constructor(private todoService: TodoService/*, private dragulaService: DragulaService*/, private toastController: ToastController) {
+	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
 
-		/*this.dragulaService.drag('bag')
+		this.dragulaService.drag('bag')
 			.subscribe(({ name, el, source }) => {
 				
 			});
 	
 		this.dragulaService.removeModel('bag')
 			.subscribe(({ item }) => {
-				this.toastController.create({
-					message: 'Removed: ' + item.value,
-					duration: 2000
-					}).then(toast => toast.present());
+				this.delete(item, 0);
 			});
 	
 		this.dragulaService.dropModel('bag')
@@ -43,7 +40,13 @@ export class TodoPage implements DoCheck {
 	
 		this.dragulaService.createGroup('bag', {
 			removeOnSpill: true
-		});*/
+		});
+	}
+
+	ngOnInit() {
+		this.aMit = this.todoService.findAllMit();
+		this.aToday = this.todoService.findAllToday();
+		this.aLater = this.todoService.findAllLater();
 	}
 
 	ngDoCheck() {
@@ -55,6 +58,7 @@ export class TodoPage implements DoCheck {
 	// ~ crud
 
 	addTodo() {
+		//!this.editing ? this.create(this.newTodo) : this.update(this.newTodo);
 		this.create(this.newTodo);
 		this.clearForm();
 	}
@@ -62,26 +66,18 @@ export class TodoPage implements DoCheck {
 	private create(todo: Todo) {
 		console.log(`Create ${JSON.stringify(todo)}`);
 		this.todoService.create(todo, this.selectedQuadrant);
-		this.newTodo = new Todo(0, '');
 	}
 
 	edit(todo: Todo) {
 		console.log(`Edit ${JSON.stringify(todo)}`);
+		this.editing = true;
 		this.newTodo = todo;
-		this.snapshot = TodoUtils.copy(todo);
-	}
-
-	cancelEdit() {
-		TodoUtils.copyProperties(this.snapshot, this.newTodo);
-		this.newTodo = null;
-		this.snapshot = null;
 	}
 
 	update(todo: Todo) {
-		console.log(`Delete ${JSON.stringify(todo)}`);
-		this.newTodo = null;
-		this.snapshot = null;
-		this.todoService.update(todo);
+		console.log(`Update ${JSON.stringify(todo)}`);
+		this.todoService.update(todo, this.selectedQuadrant);
+		this.clearForm();
 	}
 
 	delete(todo: Todo, timescale: TodoTimescale) {
@@ -97,8 +93,9 @@ export class TodoPage implements DoCheck {
 	/* utilities */
 
 	clearForm(){
-		this.newTodo = new Todo(0, '');
+		this.newTodo = new Todo(0, "");
 		this.selectedQuadrant = "MIT";
+		this.editing = false;
 	}
 
 	get timescale (){

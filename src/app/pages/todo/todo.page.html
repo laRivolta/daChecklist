@@ -6,9 +6,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content forceOverscroll="false">
+<ion-content padding>
     <ion-grid>
-   
       <ion-row align-items-center>
         <ion-col size="8">
           <ion-item>
@@ -32,17 +31,26 @@
       <ion-row no-padding class="matrix">
         <ion-col size="12" class="mit">
           <div class="q-header">MIT</div>
-          <!--<ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">-->
-          <ion-list lines="none">
-            <ion-item-sliding *ngFor="let todo of aMit">
+          <ion-list dragula="bag" [(dragulaModel)]="aMit" lines="none">
+            <ion-item-sliding *ngFor="let todo of aMit" (ionSwipe)="delete(todo, timescale.MIT)">
               <ion-item expand="block" text-wrap>
                 <div class="view" *ngIf="todo">
                   <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.MIT)" [checked]="todo.completed">
                   <label>{{todo.title}}</label>
                 </div>
+                <ion-reorder></ion-reorder>
               </ion-item>
+              <ion-item-options side="start">
+                <ion-item-option color="primary" (click)="edit(todo, timescale.MIT)">
+                  <ion-icon name="create"></ion-icon>
+                  Edit
+              </ion-item-option>
+              </ion-item-options>
               <ion-item-options side="end">
-                <ion-item-option color="danger" (click)="delete(todo, timescale.MIT)">Delete</ion-item-option>
+                <ion-item-option color="danger" (click)="delete(todo, timescale.MIT)">
+                  <ion-icon name="trash"></ion-icon>
+                  Delete
+                </ion-item-option>
               </ion-item-options>
             </ion-item-sliding>
           </ion-list>
@@ -50,39 +58,57 @@
    
         <ion-col size="12" class="today">
           <div class="q-header">Today</div>
-          <!--<ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">-->
-          <ion-list lines="none">
-            <ion-item-sliding *ngFor="let todo of aToday">
+          <ion-list dragula="bag" [(dragulaModel)]="aToday" lines="none">
+            <ion-item-sliding *ngFor="let todo of aToday" (ionSwipe)="delete(todo, timescale.Today)">
               <ion-item expand="block" text-wrap>
                 <div class="view" *ngIf="todo">
                   <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Today)" [checked]="todo.completed">
                   <label>{{todo.title}}</label>
                 </div>
+                <ion-reorder></ion-reorder>
               </ion-item>
+              <ion-item-options side="start">
+                <ion-item-option color="primary" (click)="edit(todo, timescale.Today)">
+                  <ion-icon name="create"></ion-icon>
+                    Edit
+                </ion-item-option>
+              </ion-item-options>
               <ion-item-options side="end">
-                <ion-item-option color="danger" (click)="delete(todo, timescale.Today)">Delete</ion-item-option>
+                <ion-item-option color="danger" (click)="delete(todo, timescale.Today)">
+                  <ion-icon name="trash"></ion-icon>
+                  Delete
+                </ion-item-option>
               </ion-item-options>
             </ion-item-sliding>
           </ion-list>
         </ion-col>
    
         <ion-col size="12" class="later">
-          <div class="q-header">Later</div>
-          <!--<ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">-->
-          <ion-list lines="none">
-            <ion-item-sliding *ngFor="let todo of aLater">
-              <ion-item expand="block" text-wrap>
-                <div class="view" *ngIf="todo">
-                  <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
-                  <label>{{todo.title}}</label>
-                </div>
-              </ion-item>
-              <ion-item-options side="end">
-                <ion-item-option color="danger" (click)="delete(todo, timescale.Later)">Delete</ion-item-option>
-              </ion-item-options>
-            </ion-item-sliding>
-          </ion-list>
-        </ion-col>
+            <div class="q-header">Later</div>
+            <ion-list dragula="bag" [(dragulaModel)]="aLater" lines="none">
+              <ion-item-sliding *ngFor="let todo of aLater" (ionSwipe)="delete(todo, timescale.Later)">
+                <ion-item expand="block" text-wrap>
+                  <div class="view" *ngIf="todo">
+                    <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Later)" [checked]="todo.completed">
+                    <label>{{todo.title}}</label>
+                  </div>
+                  <ion-reorder></ion-reorder>
+                </ion-item>
+                <ion-item-options side="start">
+                  <ion-item-option color="primary" (click)="edit(todo, timescale.Later)">
+                    <ion-icon name="create"></ion-icon>
+                      Edit
+                  </ion-item-option>
+                </ion-item-options>
+                <ion-item-options side="end">
+                  <ion-item-option color="danger" (click)="delete(todo, timescale.Later)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                  </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            </ion-list>
+          </ion-col>
   
       </ion-row>
     </ion-grid>

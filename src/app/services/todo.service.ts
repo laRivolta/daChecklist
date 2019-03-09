@@ -9,23 +9,12 @@ export class TodoService {
 	private static STORAGE_KEY_TODAY= 'aToday';
 	private static STORAGE_KEY_LATER = 'aLater';
 
-	private lastInsertId = 0;
-
 	private aMit: Array<Todo> = new Array()
 	private aToday: Array<Todo> = new Array();
 	private aLater: Array<Todo> = new Array();
 
 	constructor() {
 		this.fetch();
-		if (this.aMit.length > 0) {
-			this.lastInsertId = this.aMit[this.aMit.length - 1].id;
-		}
-		if (this.aToday.length > 0) {
-			this.lastInsertId = this.aToday[this.aToday.length - 1].id;
-		}
-		if (this.aLater.length > 0) {
-			this.lastInsertId = this.aLater[this.aLater.length - 1].id;
-		}
 	}
 
 	create(todo: Todo, timescale: string): Todo {
@@ -35,7 +24,7 @@ export class TodoService {
 			return;
 		}
 
-		const newTodo = new Todo(++this.lastInsertId, todo.title, timescale, todo.completed);
+		const newTodo = new Todo(this.getRandomInt(), todo.title, timescale, todo.completed);
 		switch (timescale) {
 			case "MIT":
 				this.aMit.push(newTodo);
@@ -52,7 +41,7 @@ export class TodoService {
 	}
 
 	findAllMit() {
-		console.log(`Fetch Mit's`);
+		//console.log(`Fetch Mit's`);
 		return this.aMit ? this.aMit : [];
 	}
 
@@ -66,11 +55,13 @@ export class TodoService {
 		return this.aLater ? this.aLater : [];
 	}
 
-	update(todo: Todo) {
-		todo.title = todo.title.trim();
-		if (todo.title.length === 0) {
-			//this.delete(todo);
+	update(todo: Todo, timescale: string) {
+
+		if (todo && todo.title && todo.title.trim().length === 0) {
+			console.error(`Empty title in ${JSON.stringify(todo)}`);
+			return;
 		}
+
 		this.save();
 	}
 
@@ -96,15 +87,21 @@ export class TodoService {
 		switch (timescale) {
 			case TodoTimescale.MIT:
 				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
-				this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
+				if (currentTodoIndex > 0) {
+					this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
+				}
 				break;
 			case TodoTimescale.Today:
 				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
-				this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
+				if (currentTodoIndex > 0) {
+					this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
+				}
 				break;
 			case TodoTimescale.Later:
 				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
-				this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
+				if (currentTodoIndex > 0) {
+					this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
+				}
 				break;
 		}
 		this.save();
@@ -131,5 +128,9 @@ export class TodoService {
 		localStorage.setItem(TodoService.STORAGE_KEY_MIT, JSON.stringify(this.aMit));
 		localStorage.setItem(TodoService.STORAGE_KEY_TODAY, JSON.stringify(this.aToday));
 		localStorage.setItem(TodoService.STORAGE_KEY_LATER, JSON.stringify(this.aLater));
+	}
+
+	private getRandomInt() {
+		return Math.floor(Math.random() * (9999999999 - 0)) + 1;
 	}
 }
