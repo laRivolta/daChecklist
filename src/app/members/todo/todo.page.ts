@@ -4,6 +4,7 @@ import { DragulaService } from 'ng2-dragula';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../services/todo.service';
+import { AuthenticationService } from './../../services/authentication.service';
 
 @Component({
 	selector: 'app-todo',
@@ -23,7 +24,8 @@ export class TodoPage implements OnInit, DoCheck {
 	currentTodo: Todo;
 	snapshot: Todo;
 	 
-	constructor(private todoService: TodoService, private dragulaService: DragulaService, private toastController: ToastController) {
+	constructor(private todoService: TodoService, private dragulaService: DragulaService, 
+		private toastController: ToastController, private authService: AuthenticationService) {
 
 		this.dragulaService.drag('bag')
 			.subscribe(({ name, el, source }) => {
@@ -90,6 +92,10 @@ export class TodoPage implements OnInit, DoCheck {
 	toggle(todo: Todo, timescale: TodoTimescale) {
 		this.todoService.toggle(todo, timescale);
 		this.clearForm();
+	}
+
+	logout() {
+		this.authService.logout();
 	}
 
 	/* utilities */

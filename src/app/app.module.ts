@@ -8,16 +8,17 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { PipesModule } from './pipes.module';
-
+import { IonicStorageModule } from '@ionic/storage';
 import { DragulaModule } from 'ng2-dragula';
+
+import { PipesModule } from './pipes.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule, AppRoutingModule, PipesModule,
-    IonicModule.forRoot(), DragulaModule.forRoot()
+    IonicModule.forRoot(), DragulaModule.forRoot(), IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,

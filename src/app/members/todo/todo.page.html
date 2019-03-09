@@ -1,9 +1,12 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      daChecklist
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="logout()">
+            <ion-icon slot="icon-only" name="log-out"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>daChecklist</ion-title>
+      </ion-toolbar>
 </ion-header>
 
 <ion-content padding>

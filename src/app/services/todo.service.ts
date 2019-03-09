@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {Todo, TodoTimescale} from '../pages/todo/models/todo.model';
+import {Todo, TodoTimescale} from '../members/todo/models/todo.model';
 
 @Injectable()
 export class TodoService {
