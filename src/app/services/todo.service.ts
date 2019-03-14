@@ -1,19 +1,20 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
-import {Todo, TodoTimescale} from '../members/todo/models/todo.model';
+import { Todo, TodoTimescale } from '../members/todo/models/todo.model';
+
+const STORAGE_KEY_MIT = 'aMit';
+const STORAGE_KEY_TODAY= 'aToday';
+const STORAGE_KEY_LATER = 'aLater';
 
 @Injectable()
 export class TodoService {
-
-	private static STORAGE_KEY_MIT = 'aMit';
-	private static STORAGE_KEY_TODAY= 'aToday';
-	private static STORAGE_KEY_LATER = 'aLater';
 
 	private aMit: Array<Todo> = new Array()
 	private aToday: Array<Todo> = new Array();
 	private aLater: Array<Todo> = new Array();
 
-	constructor() {
+	constructor(private storage: Storage) {
 		this.fetch();
 	}
 
@@ -131,25 +132,64 @@ export class TodoService {
 
 	private fetch() {
 		console.log(`Fetch all lists ...`);
-		const aMitPersisted = localStorage.getItem(TodoService.STORAGE_KEY_MIT);
-		const aTodayPersisted = localStorage.getItem(TodoService.STORAGE_KEY_TODAY);
-		const aLaterPersisted = localStorage.getItem(TodoService.STORAGE_KEY_LATER);
-		try {
-			this.aMit = JSON.parse(aMitPersisted || '[]');
-			this.aToday = JSON.parse(aTodayPersisted || '[]');
-			this.aLater = JSON.parse(aLaterPersisted || '[]');
-		} catch (ignore) {
-			this.aMit = new Array();
-			this.aLater = new Array();
-			this.aToday = new Array();
-		}
+		this.fetchMit();
+		this.fetchToday();
+		this.fetchLater();
+	}
+
+	private fetchMit(){
+		return this.storage.get(STORAGE_KEY_MIT).then(aMitPersisted => {
+			try {
+				this.aMit = JSON.parse(aMitPersisted || '[]');
+			} catch (ignore) {
+				this.aMit = new Array();
+			}
+		});
+	}
+
+	private fetchToday(){
+		return this.storage.get(STORAGE_KEY_TODAY).then(aTodayPersisted => {
+			try {
+				this.aToday = JSON.parse(aTodayPersisted || '[]');
+			} catch (ignore) {
+				this.aToday = new Array();
+			}
+		});
+	}
+
+	private fetchLater(){
+		return this.storage.get(STORAGE_KEY_LATER).then(aLaterPersisted => {
+			try {
+				this.aLater = JSON.parse(aLaterPersisted || '[]');
+			} catch (ignore) {
+				this.aLater = new Array();
+			}
+		});
 	}
 
 	private save(): void {
 		console.log(`Saving all lists ...`);
-		localStorage.setItem(TodoService.STORAGE_KEY_MIT, JSON.stringify(this.aMit));
-		localStorage.setItem(TodoService.STORAGE_KEY_TODAY, JSON.stringify(this.aToday));
-		localStorage.setItem(TodoService.STORAGE_KEY_LATER, JSON.stringify(this.aLater));
+		this.saveMit();
+		this.saveToday();
+		this.saveLater();
+	}
+
+	private saveMit(){
+		return this.storage.set(STORAGE_KEY_MIT, JSON.stringify(this.aMit)).then(() => {
+			console.log('STORAGE_KEY_MIT stored succesfully ');
+		});
+	}
+
+	private saveToday(){
+		return this.storage.set(STORAGE_KEY_TODAY, JSON.stringify(this.aToday)).then(() => {
+			console.log('STORAGE_KEY_TODAY stored succesfully ');
+		});
+	}
+
+	private saveLater(){
+		return this.storage.set(STORAGE_KEY_LATER, JSON.stringify(this.aLater)).then(() => {
+			console.log('STORAGE_KEY_LATER stored succesfully ');
+		});	
 	}
 
 	private getRandomInt() {
