@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { DragulaModule } from 'ng2-dragula';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PipesModule } from '../../pipes.module';
 
 import { TodoPage } from './todo.page';
@@ -20,7 +20,7 @@ import { TodoPage } from './todo.page';
         component: TodoPage
       }
     ]),
-    DragulaModule,
+    DragDropModule,
     PipesModule
   ],
   declarations: [TodoPage]

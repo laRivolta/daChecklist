@@ -1,6 +1,8 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { DragulaService } from 'ng2-dragula';
+import {
+	CdkDragDrop, moveItemInArray, transferArrayItem
+  } from '@angular/cdk/drag-drop';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../services/todo.service';
@@ -23,26 +25,7 @@ export class TodoPage implements OnInit, DoCheck {
 	currentTodo: Todo;
 	snapshot: Todo;
 	 
-	constructor(private todoService: TodoService, private dragulaService: DragulaService, 
-		private toastController: ToastController, private authService: AuthenticationService) {
-
-		this.dragulaService.drag('bag')
-			.subscribe(({ name, el, source }) => {
-				
-			});
-	
-		this.dragulaService.removeModel('bag')
-			.subscribe(({ item }) => {
-				//this.delete(item, 0);
-			});
-	
-		this.dragulaService.dropModel('bag')
-			.subscribe(({ item }) => {
-		});
-	
-		this.dragulaService.createGroup('bag', {
-			removeOnSpill: true
-		});
+	constructor(private todoService: TodoService, private toastController: ToastController, private authService: AuthenticationService) {
 	}
 
 	ngOnInit() {
@@ -53,6 +36,18 @@ export class TodoPage implements OnInit, DoCheck {
 	ngDoCheck() {
 		this.aPriority1 = this.todoService.findAllPriority1();
 		this.aPriority2 = this.todoService.findAllPriority2();
+	}
+
+	drop(event: CdkDragDrop<Array<Todo>>) {
+		if (event.previousContainer === event.container) {
+			moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+		} else {
+			transferArrayItem(event.previousContainer.data,
+							event.container.data,
+							event.previousIndex,
+							event.currentIndex);
+		}
+		this.todoService.save();
 	}
 	
 	// ~ crud

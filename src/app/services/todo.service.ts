@@ -131,7 +131,7 @@ export class TodoService {
 		});
 	}
 
-	private save(): void {
+	save(): void {
 		console.log(`Saving all lists ...`);
 		this.savePriority1();
 		this.savePriority2();

@@ -10,6 +10,7 @@
 </ion-header>
 
 <ion-content padding>
+
     <ion-grid>
       <ion-row align-items-center>
         <ion-col size="8">
@@ -29,12 +30,15 @@
         </ion-col>
    
       </ion-row>
-   
-      <ion-row no-padding class="matrix">
+
+      <ion-row no-padding class="matrix" cdkDropListGroup>
         <ion-col size="12" class="today">
           <div class="q-header">Today</div>
-          <ion-list dragula="bag" [(dragulaModel)]="aPriority1" lines="none">
-            <ion-item *ngFor="let todo of aPriority1" expand="block" text-wrap>
+          <ion-list cdkDropList
+                    [cdkDropListData]="aPriority1"
+                    (cdkDropListDropped)="drop($event)"
+                    class="box-list" lines="none">
+            <ion-item *ngFor="let todo of aPriority1" cdkDrag [cdkDragData]="todo" expand="block" text-wrap>
               <div class="view" *ngIf="todo">
                 <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Priority1)" [checked]="todo.completed">
                 <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
@@ -45,12 +49,16 @@
                     class="edit" autofocus>
             </ion-item>
           </ion-list>
+            
         </ion-col>
    
         <ion-col size="12" class="later">
           <div class="q-header">Later</div>
-          <ion-list dragula="bag" [(dragulaModel)]="aPriority2" lines="none">
-            <ion-item *ngFor="let todo of aPriority2" expand="block" text-wrap>
+          <ion-list cdkDropList
+                    [cdkDropListData]="aPriority2"
+                    (cdkDropListDropped)="drop($event)"
+                    class="box-list" lines="none">
+            <ion-item *ngFor="let todo of aPriority2" cdkDrag [cdkDragData]="todo" expand="block" text-wrap>
               <div class="view" *ngIf="todo">
                 <input class="toggle" type="checkbox" (change)="toggle(todo, timescale.Priority2)" [checked]="todo.completed">
                 <label *ngIf="currentTodo?.id != todo.id" (dblclick)="edit(todo)">{{todo.title}}</label>
@@ -61,6 +69,7 @@
                     class="edit" autofocus>
             </ion-item>
           </ion-list>
+          
         </ion-col>
   
       </ion-row>
