@@ -3,34 +3,27 @@ import { Storage } from '@ionic/storage';
 
 import { Todo, TodoTimescale } from '../members/todo/models/todo.model';
 
-const STORAGE_KEY_MIT = 'aMit';
-const STORAGE_KEY_TODAY= 'aToday';
-const STORAGE_KEY_LATER = 'aLater';
+const STORAGE_KEY_MIT = 'aPriority1';
+const STORAGE_KEY_TODAY= 'aPriority2';
 
 @Injectable()
 export class TodoService {
 
-	private aMit: Array<Todo> = new Array()
-	private aToday: Array<Todo> = new Array();
-	private aLater: Array<Todo> = new Array();
+	private aPriority1: Array<Todo> = new Array()
+	private aPriority2: Array<Todo> = new Array();
 
 	constructor(private storage: Storage) {
 		this.fetch();
 	}
 
-	findAllMit() {
-		//console.log(`Fetch Mit's`);
-		return this.aMit ? this.aMit : [];
+	findAllPriority1(): Array<Todo> {
+		//console.log(`Fetch Priority 1 todo's`);
+		return this.aPriority1 ? this.aPriority1 : [];
 	}
 
-	findAllToday() {
-		//console.log(`Fetch Today's`);
-		return this.aToday ? this.aToday : [];
-	}
-
-	findAllLater() {
-		//console.log(`Fetch Later's`);
-		return this.aLater ? this.aLater : [];
+	findAllPriority2(): Array<Todo> {
+		//console.log(`Fetch Priority 2 todo's`);
+		return this.aPriority2 ? this.aPriority2 : [];
 	}
 
 	create(todo: Todo, timescale: string): Todo {
@@ -43,21 +36,18 @@ export class TodoService {
 		const newTodo = new Todo(this.getRandomInt(), todo.title, timescale, todo.completed);
 		console.log(`Create ${JSON.stringify(newTodo)}`);
 		switch (timescale) {
-			case "MIT":
-				this.aMit.push(newTodo);
-				break;
 			case "Today":
-				this.aToday.push(newTodo);
+				this.aPriority1.push(newTodo);
 				break;
 			case "Later":
-				this.aLater.push(newTodo);
+				this.aPriority2.push(newTodo);
 				break;
 		}
 		this.save();
 		return newTodo;
 	}
 
-	update(todo: Todo, timescale: TodoTimescale) {
+	update(todo: Todo, timescale: TodoTimescale): void {
 		
 		if (todo && todo.title && todo.title.trim().length === 0) {
 			console.error(`Empty title in ${JSON.stringify(todo)}`);
@@ -66,133 +56,100 @@ export class TodoService {
 		console.log(`Update ${JSON.stringify(todo)}`);
 		let currentTodoIndex = -1;
 		switch (timescale) {
-			case TodoTimescale.MIT:
-				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
+			case TodoTimescale.Priority1:
+				currentTodoIndex = this.aPriority1.findIndex(t => todo.id === t.id);
 				if (currentTodoIndex >= 0) {
-					this.aMit[currentTodoIndex] = this.aMit[currentTodoIndex];
+					this.aPriority1[currentTodoIndex] = this.aPriority1[currentTodoIndex];
 				}
 				break;
-			case TodoTimescale.Today:
-				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
+			case TodoTimescale.Priority2:
+				currentTodoIndex = this.aPriority2.findIndex(t => todo.id === t.id);
 				if (currentTodoIndex >= 0) {
-					this.aToday[currentTodoIndex] = this.aToday[currentTodoIndex];
-				}
-				break;
-			case TodoTimescale.Later:
-				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
-				if (currentTodoIndex >= 0) {
-					this.aLater[currentTodoIndex] = this.aLater[currentTodoIndex];
+					this.aPriority2[currentTodoIndex] = this.aPriority2[currentTodoIndex];
 				}
 				break;
 		}
 		this.save();
 	}
 
-	delete(todo: Todo, timescale: TodoTimescale) {
+	delete(todo: Todo, timescale: TodoTimescale): void {
 		console.log(`Delete ${JSON.stringify(todo)} `);
 		switch (timescale) {
-			case TodoTimescale.MIT:
-				this.aMit = this.aMit.filter((t) => t.id !== todo.id);
+			case TodoTimescale.Priority1:
+				this.aPriority1 = this.aPriority1.filter((t) => t.id !== todo.id);
 				break;
-			case TodoTimescale.Today:
-				this.aToday = this.aToday.filter((t) => t.id !== todo.id);
-				break;
-			case TodoTimescale.Later:
-				this.aLater = this.aLater.filter((t) => t.id !== todo.id);
+			case TodoTimescale.Priority2:
+				this.aPriority2 = this.aPriority2.filter((t) => t.id !== todo.id);
 				break;
 		}
 		this.save();
 	}
 
-	toggle(todo: Todo, timescale: TodoTimescale) {
+	toggle(todo: Todo, timescale: TodoTimescale): void {
 		console.log(`Toggle ${JSON.stringify(todo)} in ${timescale} ...`);
 		let currentTodoIndex = -1;
 		switch (timescale) {
-			case TodoTimescale.MIT:
-				currentTodoIndex = this.aMit.findIndex(t => todo.id === t.id);
+			case TodoTimescale.Priority1:
+				currentTodoIndex = this.aPriority1.findIndex(t => todo.id === t.id);
 				if (currentTodoIndex >= 0) {
-					this.aMit[currentTodoIndex].completed = !this.aMit[currentTodoIndex].completed;
+					this.aPriority1[currentTodoIndex].completed = !this.aPriority1[currentTodoIndex].completed;
 				}
 				break;
-			case TodoTimescale.Today:
-				currentTodoIndex = this.aToday.findIndex(t => todo.id === t.id);
+			case TodoTimescale.Priority2:
+				currentTodoIndex = this.aPriority2.findIndex(t => todo.id === t.id);
 				if (currentTodoIndex >= 0) {
-					this.aToday[currentTodoIndex].completed = !this.aToday[currentTodoIndex].completed;
-				}
-				break;
-			case TodoTimescale.Later:
-				currentTodoIndex = this.aLater.findIndex(t => todo.id === t.id);
-				if (currentTodoIndex >= 0) {
-					this.aLater[currentTodoIndex].completed = !this.aLater[currentTodoIndex].completed;
+					this.aPriority2[currentTodoIndex].completed = !this.aPriority2[currentTodoIndex].completed;
 				}
 				break;
 		}
 		this.save();
 	}
 
-	private fetch() {
+	private fetch(): void {
 		console.log(`Fetch all lists ...`);
-		this.fetchMit();
-		this.fetchToday();
-		this.fetchLater();
+		this.fetchPriority1();
+		this.fetchPriority2();
 	}
 
-	private fetchMit(){
-		return this.storage.get(STORAGE_KEY_MIT).then(aMitPersisted => {
+	private fetchPriority1(): Promise<any>{
+		return this.storage.get(STORAGE_KEY_MIT).then(aPriority1Persisted => {
 			try {
-				this.aMit = JSON.parse(aMitPersisted || '[]');
+				this.aPriority1 = JSON.parse(aPriority1Persisted || '[]');
 			} catch (ignore) {
-				this.aMit = new Array();
+				this.aPriority1 = new Array();
 			}
 		});
 	}
 
-	private fetchToday(){
-		return this.storage.get(STORAGE_KEY_TODAY).then(aTodayPersisted => {
+	private fetchPriority2(): Promise<any> {
+		return this.storage.get(STORAGE_KEY_TODAY).then(aPriority2Persisted => {
 			try {
-				this.aToday = JSON.parse(aTodayPersisted || '[]');
+				this.aPriority2 = JSON.parse(aPriority2Persisted || '[]');
 			} catch (ignore) {
-				this.aToday = new Array();
-			}
-		});
-	}
-
-	private fetchLater(){
-		return this.storage.get(STORAGE_KEY_LATER).then(aLaterPersisted => {
-			try {
-				this.aLater = JSON.parse(aLaterPersisted || '[]');
-			} catch (ignore) {
-				this.aLater = new Array();
+				this.aPriority2 = new Array();
 			}
 		});
 	}
 
 	private save(): void {
 		console.log(`Saving all lists ...`);
-		this.saveMit();
-		this.saveToday();
-		this.saveLater();
+		this.savePriority1();
+		this.savePriority2();
 	}
 
-	private saveMit(){
-		return this.storage.set(STORAGE_KEY_MIT, JSON.stringify(this.aMit)).then(() => {
+	private savePriority1(): Promise<any>{
+		return this.storage.set(STORAGE_KEY_MIT, JSON.stringify(this.aPriority1)).then(() => {
 			console.log('STORAGE_KEY_MIT stored succesfully ');
 		});
 	}
 
-	private saveToday(){
-		return this.storage.set(STORAGE_KEY_TODAY, JSON.stringify(this.aToday)).then(() => {
+	private savePriority2(): Promise<any>{
+		return this.storage.set(STORAGE_KEY_TODAY, JSON.stringify(this.aPriority2)).then(() => {
 			console.log('STORAGE_KEY_TODAY stored succesfully ');
 		});
 	}
 
-	private saveLater(){
-		return this.storage.set(STORAGE_KEY_LATER, JSON.stringify(this.aLater)).then(() => {
-			console.log('STORAGE_KEY_LATER stored succesfully ');
-		});	
-	}
-
-	private getRandomInt() {
+	private getRandomInt(): number {
 		return Math.floor(Math.random() * (9999999999 - 0)) + 1;
 	}
 }

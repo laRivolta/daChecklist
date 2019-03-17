@@ -29,7 +29,6 @@ export class TodoUtils {
 }
 
 export enum TodoTimescale {
-    MIT = 1,
-    Today = 2,
-    Later = 3
+    Priority1 = 1,
+    Priority2 = 2
 }

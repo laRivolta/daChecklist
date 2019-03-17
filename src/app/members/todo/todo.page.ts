@@ -14,11 +14,10 @@ import { AuthenticationService } from './../../services/authentication.service';
 })
 export class TodoPage implements OnInit, DoCheck {
 	
-	aMit: Array<Todo> = new Array();
-	aToday: Array<Todo> = new Array();
-	aLater: Array<Todo> = new Array();
+	aPriority1: Array<Todo> = new Array();
+	aPriority2: Array<Todo> = new Array();
 		
-	selectedQuadrant: string = "MIT";
+	selectedQuadrant: string = "Today";
 
 	newTodo: Todo = new Todo(0,'');
 	currentTodo: Todo;
@@ -47,15 +46,13 @@ export class TodoPage implements OnInit, DoCheck {
 	}
 
 	ngOnInit() {
-		this.aMit = this.todoService.findAllMit();
-		this.aToday = this.todoService.findAllToday();
-		this.aLater = this.todoService.findAllLater();
+		this.aPriority1 = this.todoService.findAllPriority1();
+		this.aPriority2 = this.todoService.findAllPriority2();
 	}
 
 	ngDoCheck() {
-		this.aMit = this.todoService.findAllMit();
-		this.aToday = this.todoService.findAllToday();
-		this.aLater = this.todoService.findAllLater();
+		this.aPriority1 = this.todoService.findAllPriority1();
+		this.aPriority2 = this.todoService.findAllPriority2();
 	}
 	
 	// ~ crud
@@ -102,7 +99,7 @@ export class TodoPage implements OnInit, DoCheck {
 
 	clearForm(){
 		this.newTodo = new Todo(0, "");
-		this.selectedQuadrant = "MIT";
+		this.selectedQuadrant = "Today";
 		this.currentTodo = null;
 		this.snapshot = null;
 	}
