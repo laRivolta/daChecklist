@@ -20,9 +20,8 @@ export class LoginPage implements OnInit {
       public alertCtrl: AlertController,  
       private router: Router,
       private formBuilder: FormBuilder, 
-      private authService: AuthenticationService ) { }
+      private authService: AuthenticationService ) { 
 
-  ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.compose([
         Validators.maxLength(150), 
@@ -36,6 +35,8 @@ export class LoginPage implements OnInit {
     });
   }
 
+  ngOnInit() {}
+
   async loginUser(loginForm: FormGroup): Promise<void> {
     if (!loginForm.valid) {
       console.log('Form is not valid yet, current value:', loginForm.value);
@@ -43,13 +44,13 @@ export class LoginPage implements OnInit {
       this.loading = await this.loadingCtrl.create();
       await this.loading.present();
   
-      const email = loginForm.value.email;
+      const username = loginForm.value.username;
       const password = loginForm.value.password;
   
-      this.authService.loginUser(email, password).then(
+      this.authService.loginUser(username, password).then(
         () => {
           this.loading.dismiss().then(() => {
-            this.router.navigateByUrl('home');
+            this.router.navigate(['member', 'todos']);
           });
         },
         error => {

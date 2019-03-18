@@ -24,23 +24,10 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this._platform.ready().then(() => {
-
-      firebase.initializeApp(firebaseConfig);
-      
-      if (this.isNative()) {
-        this.initNative();
-      }
-
-      this.authenticationService.authenticationState.subscribe(state => {
-        if (state) {
-          this.router.navigate(['members', 'todo']);
-        } else {
-          this.router.navigate(['home']);
-        }
-      });
-
-    });
+    firebase.initializeApp(firebaseConfig);  
+    if (this.isNative()) {
+      this.initNative();
+    }
   }
 
   private initNative() {

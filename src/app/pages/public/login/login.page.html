@@ -9,8 +9,7 @@
                 [class.invalid]="!f.username.valid && f.username.touched"
             ></ion-input>
         </ion-item>
-        <ion-item
-            class="error-message"
+        <ion-item class="error-message"
             *ngIf="!f.username.valid && f.username.touched"
         >
             <ion-label>
@@ -24,11 +23,10 @@
                 formControlName="password" type="password" 
                 placeholder="Enter your password here"
                 [class.invalid]="!f.password.valid && f.password.touched"
+                (keyup.enter)="loginUser(loginForm)"
             ></ion-input>
         </ion-item>
-        <ion-item
-            *ngIf="!f.password.valid && f.password.touched"
-        >
+        <ion-item *ngIf="!f.password.valid && f.password.touched">
             <ion-label>
                 Your password needs more than 6 characters.
             </ion-label>

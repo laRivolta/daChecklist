@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { Todo, TodoTimescale } from '../members/todo/models/todo.model';
+import { Todo, TodoTimescale } from '../pages/member/todo/models/todo.model';
 
 const STORAGE_KEY_MIT = 'aPriority1';
 const STORAGE_KEY_TODAY= 'aPriority2';

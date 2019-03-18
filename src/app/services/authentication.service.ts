@@ -1,7 +1,6 @@
 import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { BehaviorSubject } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
@@ -13,16 +12,16 @@ const TOKEN_KEY = 'username';
   providedIn: 'root'
 })
 export class AuthenticationService {
-
-  authenticationState = new BehaviorSubject(false);
  
   constructor(private storage: Storage, private plt: Platform) {}
  
   loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    console.log(`Login in as ${email}`);
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
   
   signupUser(email: string, password: string): Promise<any> {
+    console.log(`Sign in as ${email}`);
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -39,10 +38,12 @@ export class AuthenticationService {
   }
 
   resetPassword(email:string): Promise<void> {
+    console.log(`Reset pass for ${email}`);
     return firebase.auth().sendPasswordResetEmail(email);
   }
 
   logoutUser():Promise<void> {
+    console.log(`Logout`);
     return firebase.auth().signOut();
   }
  
