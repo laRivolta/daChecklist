@@ -5,7 +5,7 @@
             <ion-label position="stacked">Email</ion-label>
             <ion-input 
                 formControlName="username" type="email" 
-                [(ngModel)]="userProfile.username" placeholder="Enter your username here"
+                placeholder="Enter your username here"
                 [class.invalid]="!f.username.valid && f.username.touched"
             ></ion-input>
         </ion-item>
@@ -22,7 +22,7 @@
             <ion-label position="stacked">Password</ion-label>
             <ion-input 
                 formControlName="password" type="password" 
-                [(ngModel)]="userProfile.password" placeholder="Enter your password here"
+                placeholder="Enter your password here"
                 [class.invalid]="!f.password.valid && f.password.touched"
             ></ion-input>
         </ion-item>

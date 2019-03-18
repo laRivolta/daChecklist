@@ -4,7 +4,6 @@ import { LoadingController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserProfile } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +13,6 @@ import { UserProfile } from 'src/app/models/user.model';
 export class LoginPage implements OnInit {
 
   private loginForm: FormGroup;
-  public userProfile: UserProfile = new UserProfile('', '');
   public loading: HTMLIonLoadingElement;
 
   constructor( 
