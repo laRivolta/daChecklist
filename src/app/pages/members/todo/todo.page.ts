@@ -5,8 +5,8 @@ import {
   } from '@angular/cdk/drag-drop';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
-import { TodoService } from '../../services/todo.service';
-import { AuthenticationService } from './../../services/authentication.service';
+import { TodoService } from '../../../services/todo.service';
+import { AuthenticationService } from './../../../services/authentication.service';
 
 @Component({
 	selector: 'app-todo',
