@@ -1,0 +1,6 @@
+{
+  "appId": "com.larivolta.daChecklist",
+  "appName": "daChecklist",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}

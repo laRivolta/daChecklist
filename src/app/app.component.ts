@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-
+import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
+
+const { SplashScreen, StatusBar } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,7 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent {
   constructor(
-    private platform: Platform,
+    private _platform: Platform,
     private authenticationService: AuthenticationService,
     private router: Router
   ) {
@@ -19,7 +21,11 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    this._platform.ready().then(() => {
+      
+      if (this.isNative()) {
+        this.initNative();
+      }
 
       this.authenticationService.authenticationState.subscribe(state => {
         if (state) {
@@ -28,6 +34,25 @@ export class AppComponent {
           this.router.navigate(['home']);
         }
       });
+
     });
   }
+
+  private initNative() {
+      SplashScreen.hide().catch(error => {
+        console.error(error);
+      });
+      StatusBar.hide().catch(error => {
+        console.error(error);
+      });
+  }
+
+  private isBrowser() {
+    return !this.isNative();
+  }
+
+  private isNative() {
+    return this._platform.is('electron');
+  }
+
 }

@@ -1,5 +1,7 @@
 {
   "name": "daChecklist",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
