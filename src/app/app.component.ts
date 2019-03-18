@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
-
 import { Router } from '@angular/router';
+
+import { firebaseConfig } from '../environments/environment';
+import * as firebase from 'firebase/app';
+
 import { AuthenticationService } from './services/authentication.service';
 
 const { SplashScreen, StatusBar } = Plugins;
@@ -22,6 +25,8 @@ export class AppComponent {
 
   initializeApp() {
     this._platform.ready().then(() => {
+
+      firebase.initializeApp(firebaseConfig);
       
       if (this.isNative()) {
         this.initNative();
