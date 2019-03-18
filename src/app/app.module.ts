@@ -9,13 +9,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
-import { PipesModule } from './pipes.module';
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    BrowserModule, AppRoutingModule, PipesModule, DragDropModule, 
+    BrowserModule, AppRoutingModule, DragDropModule, 
     IonicModule.forRoot(), IonicStorageModule.forRoot(),
   ],
   providers: [

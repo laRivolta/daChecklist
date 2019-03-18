@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PipesModule } from '../../pipes.module';
 
 import { TodoPage } from './todo.page';
 
@@ -20,8 +19,7 @@ import { TodoPage } from './todo.page';
         component: TodoPage
       }
     ]),
-    DragDropModule,
-    PipesModule
+    DragDropModule
   ],
   declarations: [TodoPage]
 })
