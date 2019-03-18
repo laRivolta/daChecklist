@@ -21,19 +21,21 @@ export class SignupPage implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder, 
     private authService: AuthenticationService ) { 
+
+      this.signupForm = this.formBuilder.group({
+        username: ['', Validators.compose([
+          Validators.maxLength(150), 
+          Validators.pattern('^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$'), 
+          Validators.required
+        ])],
+        password: ['', Validators.compose([
+          Validators.minLength(6), 
+          Validators.required
+        ])],
+      });
   }
 
-  ngOnInit() {this.signupForm = this.formBuilder.group({
-    username: ['', Validators.compose([
-      Validators.maxLength(150), 
-      Validators.pattern('^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$'), 
-      Validators.required
-    ])],
-    password: ['', Validators.compose([
-      Validators.minLength(6), 
-      Validators.required
-    ])],
-  });}
+  ngOnInit() {}
 
   async signupUser(signupForm: FormGroup): Promise<void> {
     
