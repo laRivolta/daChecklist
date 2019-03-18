@@ -25,7 +25,6 @@
     "@capacitor/cli": "1.0.0-beta.19",
     "@capacitor/core": "1.0.0-beta.19",
     "@ionic/angular": "^4.0.0",
-    "@ionic/storage": "^2.2.0",
     "core-js": "^2.5.4",
     "firebase": "^5.9.0",
     "rxjs": "~6.3.3",
