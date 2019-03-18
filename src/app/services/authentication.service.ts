@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+
 const TOKEN_KEY = 'username';
 
 @Injectable({
@@ -12,35 +16,34 @@ export class AuthenticationService {
 
   authenticationState = new BehaviorSubject(false);
  
-  constructor(private storage: Storage, private plt: Platform) { 
-    this.plt.ready().then(() => {
-      this.checkToken();
-    });
-  }
+  constructor(private storage: Storage, private plt: Platform) {}
  
-  checkToken() {
-    this.storage.get(TOKEN_KEY).then(res => {
-      if (res) {
-        this.authenticationState.next(true);
-      }
-    })
+  loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
- 
-  login(username: string) {
-    return this.storage.set(TOKEN_KEY, username).then(() => {
-      this.authenticationState.next(true);
-    });
+  
+  signupUser(email: string, password: string): Promise<any> {
+    return firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((newUserCredential: firebase.auth.UserCredential) => {
+        firebase
+          .firestore()
+          .doc(`/userProfile/${newUserCredential.user.uid}`)
+          .set({ email });
+      })
+      .catch(error => {
+        console.error(error);
+        throw new Error(error);
+      });
   }
- 
-  logout() {
-    this.storage.remove(TOKEN_KEY).then(() => {
-      this.authenticationState.next(false);
-    });
-    return this.storage.clear();
+
+  resetPassword(email:string): Promise<void> {
+    return firebase.auth().sendPasswordResetEmail(email);
   }
- 
-  isAuthenticated() {
-    return this.authenticationState.value;
+
+  logoutUser():Promise<void> {
+    return firebase.auth().signOut();
   }
  
 }

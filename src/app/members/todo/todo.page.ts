@@ -87,7 +87,7 @@ export class TodoPage implements OnInit, DoCheck {
 	}
 
 	logout() {
-		this.authService.logout();
+		//this.authService.logout();
 	}
 
 	/* utilities */
