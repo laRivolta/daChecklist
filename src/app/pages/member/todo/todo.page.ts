@@ -1,12 +1,13 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { LoadingController, AlertController, NavController } from '@ionic/angular';
 import {
 	CdkDragDrop, moveItemInArray, transferArrayItem
   } from '@angular/cdk/drag-drop';
 
 import { Todo, TodoUtils, TodoTimescale } from './models/todo.model';
 import { TodoService } from '../../../services/todo.service';
-import { AuthenticationService } from './../../../services/authentication.service';
+import { AuthenticationService } from '../../../services/authentication.service';
 
 @Component({
 	selector: 'app-todo',
@@ -15,6 +16,8 @@ import { AuthenticationService } from './../../../services/authentication.servic
 	providers: [ TodoService ]
 })
 export class TodoPage implements OnInit, DoCheck {
+
+	public loading: HTMLIonLoadingElement;
 	
 	aPriority1: Array<Todo> = new Array();
 	aPriority2: Array<Todo> = new Array();
@@ -25,8 +28,13 @@ export class TodoPage implements OnInit, DoCheck {
 	currentTodo: Todo;
 	snapshot: Todo;
 	 
-	constructor(private todoService: TodoService, private toastController: ToastController, private authService: AuthenticationService) {
-	}
+	constructor(
+		private todoService: TodoService, 
+		public loadingCtrl: LoadingController,
+      	public alertCtrl: AlertController,
+		private navCtrl: NavController,
+		private authService: AuthenticationService
+		) {}
 
 	ngOnInit() {
 		this.aPriority1 = this.todoService.findAllPriority1();
@@ -86,8 +94,27 @@ export class TodoPage implements OnInit, DoCheck {
 		this.clearForm();
 	}
 
-	logout() {
-		//this.authService.logout();
+	async logout() {
+		
+		this.loading = await this.loadingCtrl.create();
+      	await this.loading.present();
+
+		this.authService.logoutUser().then(
+			() => {
+				this.loading.dismiss().then(() => {
+					this.navCtrl.navigateRoot('/home');
+				});
+			  },
+			  error => {
+				this.loading.dismiss().then(async () => {
+				  const alert = await this.alertCtrl.create({
+					message: error.message,
+					buttons: [{ text: 'Ok', role: 'cancel' }],
+				  });
+				  await alert.present();
+				});
+			  }
+		);
 	}
 
 	/* utilities */

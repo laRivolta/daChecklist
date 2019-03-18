@@ -26,7 +26,9 @@
                 (keyup.enter)="loginUser(loginForm)"
             ></ion-input>
         </ion-item>
-        <ion-item *ngIf="!f.password.valid && f.password.touched">
+        <ion-item class="error-message" 
+            *ngIf="!f.password.valid && f.password.touched"
+        >
             <ion-label>
                 Your password needs more than 6 characters.
             </ion-label>
